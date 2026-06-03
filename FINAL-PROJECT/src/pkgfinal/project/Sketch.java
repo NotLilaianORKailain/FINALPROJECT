@@ -18,10 +18,9 @@ public class Sketch extends PApplet {
     public void settings(){
         size(800,600);
     }
-    
     public void setup(){
         background(loadImage("images/background_menu.png"));
-        startButton = new Buttons(this, 152, 200, "images/button-start.png");
+        startButton = new Buttons(this, 255, 380, "images/button-start.png");
         helpButton = new Buttons(this, 620, 20, "images/button-help.png");
         user = new UserRabbit(this, 58, 100, "images/rabbit (1).png");
     }
@@ -58,8 +57,24 @@ public class Sketch extends PApplet {
                         user.move(0, 5);
                     }
                 }
-                default:
-                    break;
+            default:
+                   break;
       }   
     }
+    
+    public void mousePressed(){
+        if (stage == 0) {
+                if (helpButton.isClicked(mouseX,mouseY)){
+                    stage = 1;
+                } else if (startButton.isClicked(mouseX,mouseY)){
+                    stage = 2;
+                }
+                
+        }
+    }
+    
+    
+    
+    
+    
 }
