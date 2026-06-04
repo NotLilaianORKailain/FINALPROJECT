@@ -16,6 +16,11 @@ public class UserRabbit {
     private int width, height;
     private PApplet app;
     private PImage image;
+    public static int imageCount = 0;
+    
+    private String[] rabbit = {"rabbit1.png", "rabbit2.png", 
+                               "rabbit3.png", "rabbit4.png", 
+                               "rabbit5.png", "rabbit6.png", "rabbit7.png",};
     
     public UserRabbit(PApplet p, int x, int y, String imagePath) {
         this.app = p;
@@ -25,9 +30,18 @@ public class UserRabbit {
         this.width = image.width;
         this.height = image.height;
     }
+    
     public void move(int dx, int dy) {
         x += dx;
         y += dy;
+        
+        imageCount = (imageCount + 1) % rabbit.length;
+        
+    }
+    
+    
+    public void display() {
+        app.image(app.loadImage("images/" + rabbit[imageCount]), x, y);
     }
     
     public void draw() {

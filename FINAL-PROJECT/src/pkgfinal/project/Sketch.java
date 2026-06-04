@@ -14,6 +14,8 @@ public class Sketch extends PApplet {
     private UserRabbit user;
     private Buttons startButton, helpButton;
     private int stage = 0;
+    
+                            public static boolean isMoving;
 
     public void settings(){
         size(800,600);
@@ -22,7 +24,7 @@ public class Sketch extends PApplet {
         background(loadImage("images/background_menu.png"));
         startButton = new Buttons(this, 255, 380, "images/button-start.png");
         helpButton = new Buttons(this, 620, 20, "images/button-help.png");
-        user = new UserRabbit(this, 58, 100, "images/rabbit (1).png");
+        user = new UserRabbit(this, 58, 100, "images/rabbit1.png");
     }
  
     public void draw(){
@@ -43,14 +45,16 @@ public class Sketch extends PApplet {
                 break;
                 
             case 2:
-                background(255); // clear the screen
+                background(loadImage("images/background_moon.png"));
                 user.draw();
 
                 if (keyPressed){
                     if (keyCode == LEFT) {
                         user.move(-5, 0);
+                        user.display();
                     } else if (keyCode == RIGHT) {
                         user.move(5, 0);
+                        user.display();
                     } else if (keyCode == UP) {
                         user.move(0, -5);
                     } else if (keyCode == DOWN) {
