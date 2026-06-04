@@ -14,8 +14,6 @@ public class Sketch extends PApplet {
     private UserRabbit user;
     private Buttons startButton, helpButton;
     private int stage = 0;
-    
-                            public static boolean isMoving;
 
     public void settings(){
         size(800,600);
