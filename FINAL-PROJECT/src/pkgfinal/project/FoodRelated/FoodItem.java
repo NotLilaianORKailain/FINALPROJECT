@@ -29,8 +29,8 @@ public class FoodItem {
         x += dx; y += dy;
         
         //if frame outline reached then reset the movemnt to border
-        x = Math.max(33, Math.min(x, 765 - width));
-        y = Math.max(-15, Math.min(y, 520 - height));
+        x = Math.max(75, Math.min(x, 727 - width));
+        y = Math.max(45, Math.min(y, 520 - height));
     }
     
     public void draw() {

@@ -4,6 +4,8 @@
  */
 
 package pkgfinal.project.FoodRelated;
+import processing.core.PApplet;
+import processing.core.PImage;
 
 /**
  *
@@ -11,4 +13,7 @@ package pkgfinal.project.FoodRelated;
  */
 public class Bun extends FoodItem {
     
+    public Bun(PApplet p, int x, int y, String imagePath) {
+        super(p,x,y,imagePath);
+    }
 }

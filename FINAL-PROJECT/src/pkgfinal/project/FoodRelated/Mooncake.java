@@ -3,11 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package pkgfinal.project.FoodRelated;
+import processing.core.PApplet;
 
 /**
  *
  * @author 343479150
  */
 public class Mooncake extends FoodItem {
-    
+        public Mooncake(PApplet p, int x, int y, String imagePath) {
+        super(p,x,y,imagePath);
+    }
 }
