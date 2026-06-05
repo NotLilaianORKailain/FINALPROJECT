@@ -4,6 +4,7 @@
  */
 package pkgfinal.project;
 import processing.core.PApplet;
+import pkgfinal.project.FoodRelated.FoodItem;
 
 /**
  *
@@ -12,6 +13,7 @@ import processing.core.PApplet;
 public class Sketch extends PApplet {
     //declare needed var for game
     private UserRabbit user;
+    private FoodItem food1;
     private Buttons startButton, helpButton;
     private int stage = 0;
 
@@ -22,33 +24,35 @@ public class Sketch extends PApplet {
         background(loadImage("images/background_menu.png"));
         startButton = new Buttons(this, 255, 380, "images/button-start.png");
         helpButton = new Buttons(this, 620, 20, "images/button-help.png");
-        user = new UserRabbit(this, 58, 100, "images/rabbit1.png");
+        user = new UserRabbit(this, 620, 400);
+        food1 = new FoodItem(this, 360,330, "images/food1 mooncake (small).png");
     }
  
     public void draw(){
         
         switch (stage){
-            //title page
-            case 0:
+
+            case 0: //title page
                 startButton.draw();
                 helpButton.draw();
                 break;
-                
-            //help page
-            case 1:
-                background(255); //clear screen
+   
+            case 1: //help page
+                background(255); 
                 textSize(20);
                 fill(0);
                 text("help screen",100, 100);
                 break;
                 
-            case 2:
+            case 2: //game page
                 background(loadImage("images/background_moon.png"));
                 user.draw();
+                food1.draw();
 
                 if (keyPressed){
                     if (keyCode == LEFT) {
-                        user.move(-5, 0);
+                        background(loadImage("images/background_moon.png"));
+                        user.move(-10, 0);
                         user.display();
                     } else if (keyCode == RIGHT) {
                         user.move(5, 0);

@@ -14,34 +14,44 @@ public class UserRabbit {
     //declare needed var to set up users rabbit
     private int x, y;
     private int width, height;
+    
     private PApplet app;
     private PImage image;
-    public static int imageCount = 0;
     
+    public static int imageCount = 0;
     private String[] rabbit = {"rabbit1.png", "rabbit2.png", 
                                "rabbit3.png", "rabbit4.png", 
                                "rabbit5.png", "rabbit6.png", "rabbit7.png",};
+    private PImage[] rabbitImages = new PImage[rabbit.length];
     
-    public UserRabbit(PApplet p, int x, int y, String imagePath) {
+    
+    public UserRabbit(PApplet p, int x, int y) {
         this.app = p;
-        this.x = x;
-        this.y = y;
-        this.image = app.loadImage(imagePath);
-        this.width = image.width;
-        this.height = image.height;
+        this.x = x; this.y = y; //location of picture
+
+        //loop through and preload images of rabbits walking
+        for (int i = 0; i < rabbit.length; i++) {
+            rabbitImages[i] = app.loadImage("images/" + rabbit[i]);
+        }
+        
+        image = rabbitImages[0]; //first picture as rabbit start
+        this.width = image.width; this.height = image.height; //picture size
     }
     
     public void move(int dx, int dy) {
-        x += dx;
-        y += dy;
+        //move rabbit to new spot
+        x += dx; y += dy;
         
-        imageCount = (imageCount + 1) % rabbit.length;
+        //if frame outline reached then reset the movemnt to border
+        x = Math.max(33, Math.min(x, 765 - width));
+        y = Math.max(-15, Math.min(y, 520 - height));
         
+        //load new frame for animation
+        imageCount = (imageCount + 1) % rabbitImages.length;
     }
     
-    
     public void display() {
-        app.image(app.loadImage("images/" + rabbit[imageCount]), x, y);
+        app.image(rabbitImages[imageCount], x, y);
     }
     
     public void draw() {
