@@ -25,7 +25,7 @@ public class Sketch extends PApplet {
         startButton = new Buttons(this, 255, 380, "images/button-start.png");
         helpButton = new Buttons(this, 620, 20, "images/button-help.png");
         user = new UserRabbit(this, 620, 400);
-        food1 = new FoodItem(this, 360,330, "images/food1 mooncake (small).png");
+        food1 = new FoodItem(this, 300,300, "images/food1 mooncake (small).png"); // 65,450
     }
  
     public void draw(){
@@ -50,19 +50,35 @@ public class Sketch extends PApplet {
                 food1.draw();
 
                 if (keyPressed){
-                    if (keyCode == LEFT) {
+                    if (keyCode == LEFT && !(user.isCollidingWith(food1) && food1.x == 33)) {
                         background(loadImage("images/background_moon.png"));
                         user.move(-10, 0);
                         user.display();
-                    } else if (keyCode == RIGHT) {
+                        food1.move(-5,0);
+                    } else if (keyCode == RIGHT && !(user.isCollidingWith(food1) && food1.x == 765 - food1.width)) {
                         user.move(5, 0);
+                        food1.move(5,0);
                         user.display();
-                    } else if (keyCode == UP) {
+                    } else if (keyCode == UP && !(user.isCollidingWith(food1) && food1.y == 0)) {
                         user.move(0, -5);
-                    } else if (keyCode == DOWN) {
+                        food1.move(0,5);
+                    } else if (keyCode == DOWN && !(user.isCollidingWith(food1) && food1.x == 520 - food1.height)) {
                         user.move(0, 5);
+                        food1.move(0,-5);
                     }
+                    food1.draw();
                 }
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
             default:
                    break;
       }   

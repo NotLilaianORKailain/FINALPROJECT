@@ -13,10 +13,10 @@ import processing.core.PImage;
  */
 public class FoodItem {
     //declare needed var to set up users rabbit
-    private int x, y;
-    private int width, height;
+    public int x, y;
+    public int width, height;
     private PApplet app;
-    private PImage image;
+    public PImage image;
     
     public FoodItem(PApplet p, int x, int y, String imagePath) {
         this.app = p;
@@ -36,5 +36,5 @@ public class FoodItem {
     public void draw() {
         app.image(image, x, y); //draw image at position
     }
-    
+
 }
