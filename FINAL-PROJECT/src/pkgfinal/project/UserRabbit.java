@@ -13,13 +13,12 @@ import processing.core.PImage;
  */
 public class UserRabbit {
     //declare needed var to set up users rabbit
-    private int x, y;
-    private int width, height;
+    public int x, y;
     
     private PApplet app;
-    private PImage image;
-    
+    private PImage image; private int width, height;
     public static int imageCount = 0;
+    
     private String[] rabbit = {"rabbit1.png", "rabbit2.png", 
                                "rabbit3.png", "rabbit4.png", 
                                "rabbit5.png", "rabbit6.png", "rabbit7.png",};
@@ -51,12 +50,8 @@ public class UserRabbit {
         imageCount = (imageCount + 1) % rabbitImages.length;
     }
     
-    public void display() {
-        app.image(rabbitImages[imageCount], x, y);
-    }
-    
     public void draw() {
-        app.image(image, x, y); //draw image at position
+        app.image(rabbitImages[imageCount], x, y);
     }
     
     public boolean isCollidingWith(FoodItem other) {

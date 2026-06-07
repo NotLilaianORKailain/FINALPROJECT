@@ -4,6 +4,7 @@
  */
 package pkgfinal.project.FoodRelated;
 
+import pkgfinal.project.Sketch;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -25,16 +26,34 @@ public class FoodItem {
         this.width = image.width; this.height = image.height; //picture size
     }
     
-    public void move(int dx, int dy) {
-        x += dx; y += dy;
-        
-        //if frame outline reached then reset the movemnt to border
-        x = Math.max(75, Math.min(x, 727 - width));
-        y = Math.max(45, Math.min(y, 520 - height));
+    public void moveX(int step) {
+        //loop and find current box, check if inbound, then move to next step x
+        for (int i = 0; i < Sketch.COLS.length; i++) {
+            if (x == Sketch.COLS[i]) {
+                int newBox = i + step; //bound to be checked in next if
+                if (newBox >= 0 && newBox < Sketch.COLS.length) {
+                    x = Sketch.COLS[newBox]; //if in bound change postion
+                } return;
+            }
+       }
     }
     
+    
+    public void moveY(int step) {
+        //loop and find current box, check if inbound, then move to next step y
+        for (int i = 0; i < Sketch.ROWS.length; i++) {
+            if (y == Sketch.ROWS[i]) {
+                int newBox = i + step; //bound to be checked in next if
+                if (newBox >= 0 && newBox < Sketch.ROWS.length) {
+                    y = Sketch.ROWS[newBox]; //if in bound change postion
+                } return;
+                        
+            }
+       }
+    }
+
     public void draw() {
-        app.image(image, x, y); //draw image at position
+        app.image(image, x-image.width/2, y-image.height/2); //draw image at position
     }
 
 }
