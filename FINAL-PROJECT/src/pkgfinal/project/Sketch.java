@@ -3,9 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package pkgfinal.project;
+
 import processing.core.PApplet;
 import pkgfinal.project.FoodRelated.FoodItem;
-
+import pkgfinal.project.FoodRelated.Egg;
+import pkgfinal.project.FoodRelated.Flour;
+import pkgfinal.project.FoodRelated.Syrup;
+import pkgfinal.project.FoodRelated.Water;
+import pkgfinal.project.FoodRelated.Mooncake;
 /**
  *
  * @author 343479150
@@ -13,14 +18,25 @@ import pkgfinal.project.FoodRelated.FoodItem;
 public class Sketch extends PApplet {
     private int stage = 0;
     private Buttons startButton, helpButton;
+    private Buttons addEgg, addFlour, addSyrup, addWater;
     private UserRabbit user;
     
     FoodItem[] food = new FoodItem[20];
     int foodCount = 1;
     
-    public static final int[] COLS = {104, 253, 399, 546, 687};
-    public static final int[] ROWS = {93, 231, 368, 490};
+    public static final int[] COLS = {107, 253, 399, 545, 691}; //add 146
+    public static final int[] ROWS = {93, 231, 369, 490}; //add 138 but the last
 
+//line(107, 0, 107, 800); debug movement put in draw
+//line(253, 0, 253, 800);
+//line(399, 0, 399, 800);
+//line(545, 0, 545, 800);
+//line(691, 0, 691, 800);
+//    line(0, 93, 800, 93);
+//    line(0, 231, 800, 231);
+//    line(0, 369, 800, 369);
+//    line(0, 490, 800, 490);
+    
     public void settings(){
         size(800,600); //set size to 800 pixel long by 600 pixel high
     }
@@ -28,18 +44,43 @@ public class Sketch extends PApplet {
         startButton = new Buttons(this, 255, 380, "images/button-start.png");
         helpButton = new Buttons(this, 620, 20, "images/button-help.png");
         
+        addEgg = new Buttons(this, 52, 518, "images/addEgg.png");
+        addFlour = new Buttons(this, 154, 518, "images/addFlour.png");
+        addSyrup = new Buttons(this, 246, 518, "images/addSyrup.png");
+        addWater = new Buttons(this, 346, 518, "images/addWater.png");
+        
         user = new UserRabbit(this, 620, 400);
-        spawnFood(0); //creates first moon cake
+        createFood("mooncake","images/mooncake.png"); //creates first moon cake
     }
- 
+    
     public void mousePressed() {
         println("x: " + mouseX + ", y: " + mouseY); //debuging
         //depending on where user clicks a new frame is shown
-        if (stage == 0 && helpButton.isClicked(mouseX, mouseY)) {
-            stage = 1;
-        } else if (stage == 0 && startButton.isClicked(mouseX, mouseY)) {
-            stage = 2;
+        switch (stage){
+            case 0:
+                if (helpButton.isClicked(mouseX, mouseY)) {
+                    stage = 1;
+                } else if (startButton.isClicked(mouseX, mouseY)) {
+                    stage = 2;
+                }
+            case 1:
+                if (addEgg.isClicked(mouseX, mouseY)) {
+
+                } 
+                if (addFlour.isClicked(mouseX, mouseY)) {
+                    stage = 2;
+                } 
+                if (addSyrup.isClicked(mouseX, mouseY)) {
+                    stage = 2;
+                }  
+                if (addWater.isClicked(mouseX, mouseY)) {
+                    stage = 2;
+                }
+                
         }
+
+        
+        
     }
 
     public void attemptMove(int dx, int dy, int stepX, int stepY) {
@@ -61,7 +102,20 @@ public class Sketch extends PApplet {
             }
         }
     }
-    public void spawnFood(int spot) {
+    
+    
+    public void createFood(String type, String imgPath) {
+        
+        if (type.equals("egg")) food[foodCount] = new Egg(this, 0, 0, imgPath);
+        else if (type.equals("flour")) food[foodCount] = new Flour(this, 0, 0, imgPath);
+        else if (type.equals("syrup")) food[foodCount] = new Syrup(this, 0, 0, imgPath);
+        else if (type.equals("water")) food[foodCount] = new Water(this, 0, 0, imgPath);
+        else food[foodCount] = new Mooncake(this, 0, 0, imgPath);
+        foodCount++;
+    }
+    
+    
+    public void locateFood(int spot, FoodItem type) {
         boolean goodSpot = false; //starts as false to run while loop
 
         while (!goodSpot) {
@@ -80,13 +134,11 @@ public class Sketch extends PApplet {
                 }
             }
 
-            if (goodSpot) { //if checker didnt turn spot to flase then make mooncake
-                food[spot] = new FoodItem(this, x, y, "images/food1mooncake.png");
+            if (goodSpot == true) { //if checker didnt turn spot to flase then make mooncake
+                food[foodCount] = new FoodItem(this, x, y, "images/food1mooncake.png");
+                foodCount++;
             }
         }
-    
-    
-    
     }
     
     
@@ -107,6 +159,11 @@ public class Sketch extends PApplet {
                 
             case 2: //game page=================================================
                 background(loadImage("images/background_moon.png"));
+                addEgg.draw();
+                addFlour.draw();
+                addSyrup.draw();
+                addWater.draw();
+                
                 if (keyPressed) {
                     if (keyCode == LEFT) {
                         attemptMove(-5, 0, -1, 0);

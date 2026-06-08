@@ -69,7 +69,7 @@ public class UserRabbit {
         
         // returns true if  the distance between the 2 cener points is
         // less than 32 pixels
-        return d < 110;
+        return d < 100;
     }
 //
 //    public boolean isClicked(int mouseX, int mouseY) {

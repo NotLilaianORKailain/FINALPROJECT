@@ -4,12 +4,16 @@
  */
 package pkgfinal.project.FoodRelated;
 import processing.core.PApplet;
+import processing.core.PImage;
+
 /**
  *
  * @author 343479150
  */
-public class Bread extends FoodItem {
-        public Bread(PApplet p, int x, int y, String imagePath) {
+
+public class Syrup extends FoodItem {
+    
+    public Syrup(PApplet p, int x, int y, String imagePath) {
         super(p,x,y,imagePath);
     }
 }
