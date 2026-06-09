@@ -11,6 +11,7 @@ import pkgfinal.project.FoodRelated.Flour;
 import pkgfinal.project.FoodRelated.Syrup;
 import pkgfinal.project.FoodRelated.Water;
 import pkgfinal.project.FoodRelated.Mooncake;
+import pkgfinal.project.FoodRelated.Dough;
 /**
  *
  * @author 343479150
@@ -22,7 +23,7 @@ public class Sketch extends PApplet {
     private UserRabbit user;
     
     FoodItem[] food = new FoodItem[20];
-    int foodCount = 1;
+    int foodCount = 0;
     
     public static final int[] COLS = {107, 253, 399, 545, 691}; //add 146
     public static final int[] ROWS = {93, 231, 369, 490}; //add 138 but the last
@@ -63,59 +64,44 @@ public class Sketch extends PApplet {
                 } else if (startButton.isClicked(mouseX, mouseY)) {
                     stage = 2;
                 }
-            case 1:
+            case 2:
                 if (addEgg.isClicked(mouseX, mouseY)) {
-
+                    createFood("egg", "images/egg.png");
                 } 
                 if (addFlour.isClicked(mouseX, mouseY)) {
-                    stage = 2;
+                    createFood("flour", "images/flour.png");
                 } 
                 if (addSyrup.isClicked(mouseX, mouseY)) {
-                    stage = 2;
+                    createFood("syrup", "images/syrup.png");
                 }  
                 if (addWater.isClicked(mouseX, mouseY)) {
-                    stage = 2;
+                    createFood("water", "images/water.png");
                 }
-                
         }
-
-        
-        
     }
 
-    public void attemptMove(int dx, int dy, int stepX, int stepY) {
+    public void attemptMove(int dx, int dy, FoodItem food, int stepX, int stepY) {
         //track rabbits premovement and move
         int oldRabbitX = user.x; 
         int oldRabbitY = user.y;
         user.move(dx, dy);
 
         //after moving is there collsion that is allowed?
-        if (user.isCollidingWith(food[0])) {
-            int oldFoodX = food[0].x; int oldFoodY = food[0].y; //save food premove
+        if (user.isCollidingWith(food)) {
+            int oldFoodX = food.x; int oldFoodY = food.y; //save food premove
 
-            if (stepX != 0) {food[0].moveX(stepX);} //if step needed, move x
-            if (stepY != 0) {food[0].moveY(stepY);} //if step needed, move y
+            if (stepX != 0) {food.moveX(stepX);} //if step needed, move x
+            if (stepY != 0) {food.moveY(stepY);} //if step needed, move y
 
             //if food didnt change in x or y then rabbit shouldnt move either
-            if (food[0].x == oldFoodX && food[0].y == oldFoodY) {
+            if (food.x == oldFoodX && food.y == oldFoodY) {
                 user.x = oldRabbitX; user.y = oldRabbitY; 
             }
         }
     }
-    
+
     
     public void createFood(String type, String imgPath) {
-        
-        if (type.equals("egg")) food[foodCount] = new Egg(this, 0, 0, imgPath);
-        else if (type.equals("flour")) food[foodCount] = new Flour(this, 0, 0, imgPath);
-        else if (type.equals("syrup")) food[foodCount] = new Syrup(this, 0, 0, imgPath);
-        else if (type.equals("water")) food[foodCount] = new Water(this, 0, 0, imgPath);
-        else food[foodCount] = new Mooncake(this, 0, 0, imgPath);
-        foodCount++;
-    }
-    
-    
-    public void locateFood(int spot, FoodItem type) {
         boolean goodSpot = false; //starts as false to run while loop
 
         while (!goodSpot) {
@@ -135,12 +121,17 @@ public class Sketch extends PApplet {
             }
 
             if (goodSpot == true) { //if checker didnt turn spot to flase then make mooncake
-                food[foodCount] = new FoodItem(this, x, y, "images/food1mooncake.png");
+                if (type.equals("egg")) food[foodCount] = new Egg(this, x, y, imgPath);
+                else if (type.equals("flour")) food[foodCount] = new Flour(this, x, y, imgPath);
+                else if (type.equals("syrup")) food[foodCount] = new Syrup(this, x, y, imgPath);
+                else if (type.equals("water")) food[foodCount] = new Water(this, x, y, imgPath);
+                else if (type.equals("dough")) food[foodCount] = new Dough(this, x, y, imgPath);
+                else food[foodCount] = new Mooncake(this, x, y, imgPath);
                 foodCount++;
             }
         }
     }
-    
+
     
     public void draw(){
         switch (stage){
@@ -163,23 +154,17 @@ public class Sketch extends PApplet {
                 addFlour.draw();
                 addSyrup.draw();
                 addWater.draw();
-                
-                if (keyPressed) {
-                    if (keyCode == LEFT) {
-                        attemptMove(-5, 0, -1, 0);
 
-                    } else if (keyCode == RIGHT) {
-                        attemptMove(5, 0, 1, 0);
-                        
-                    } else if (keyCode == UP) {
-                        attemptMove(0, -5, 0, -1);
-                        
-                        
-                    } else if (keyCode == DOWN) {
-                        attemptMove(0, 5, 0, 1);
-
+                //check movement of all items
+                for (int i = 0; i < foodCount; i++) {
+                    if (keyPressed) {
+                        if (keyCode == LEFT) attemptMove(-5, 0, food[i], -1, 0); 
+                        else if (keyCode == RIGHT) attemptMove(5, 0, food[i], 1, 0);
+                        else if (keyCode == UP) attemptMove(0, -5, food[i], 0, -1);
+                        else if (keyCode == DOWN) attemptMove(0, 5, food[i], 0, 1);
                     }
                 }
+
                 user.draw();
                 for (int i = 0; i < foodCount; i++) {
                     if (food[i] != null) {food[i].draw();} //draw all food up to counter
