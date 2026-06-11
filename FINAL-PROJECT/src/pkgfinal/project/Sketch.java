@@ -17,9 +17,8 @@ import pkgfinal.project.FoodRelated.Dough;
  * @author 343479150
  */
 public class Sketch extends PApplet {
-    private int stage = 0;
-    private Buttons startButton, helpButton;
-    private Buttons addEgg, addFlour, addSyrup, addWater;
+    private int stage, intro = 0;
+    private Buttons startButton, addEgg, addFlour, addSyrup, addWater;
     private UserRabbit user;
     
     FoodItem[] food = new FoodItem[20];
@@ -42,16 +41,14 @@ public class Sketch extends PApplet {
         size(800,600); //set size to 800 pixel long by 600 pixel high
     }
     public void setup(){
-        startButton = new Buttons(this, 255, 380, "images/button-start.png");
-        helpButton = new Buttons(this, 620, 20, "images/button-help.png");
-        
-        addEgg = new Buttons(this, 52, 518, "images/addEgg.png");
-        addFlour = new Buttons(this, 154, 518, "images/addFlour.png");
-        addSyrup = new Buttons(this, 246, 518, "images/addSyrup.png");
-        addWater = new Buttons(this, 346, 518, "images/addWater.png");
+        startButton = new Buttons(this, 255, 380, "1buttons/button-start.png");
+        addEgg = new Buttons(this, 52, 518, "1buttons/addEgg.png");
+        addFlour = new Buttons(this, 154, 518, "1buttons/addFlour.png");
+        addSyrup = new Buttons(this, 246, 518, "1buttons/addSyrup.png");
+        addWater = new Buttons(this, 346, 518, "1buttons/addWater.png");
         
         user = new UserRabbit(this, 620, 400);
-        createFood("mooncake","images/mooncake.png"); //creates first moon cake
+        createFood("mooncake","1images/mooncake.png"); //creates first moon cake
     }
     
     public void mousePressed() {
@@ -59,24 +56,18 @@ public class Sketch extends PApplet {
         //depending on where user clicks a new frame is shown
         switch (stage){
             case 0:
-                if (helpButton.isClicked(mouseX, mouseY)) {
-                    stage = 1;
-                } else if (startButton.isClicked(mouseX, mouseY)) {
-                    stage = 2;
-                }
+                if (startButton.isClicked(mouseX, mouseY)) stage = 1;
+
+            case 1:
+                if(intro<16) intro++;
+                else stage = 2;
+                break;
+            
             case 2:
-                if (addEgg.isClicked(mouseX, mouseY)) {
-                    createFood("egg", "images/egg.png");
-                } 
-                if (addFlour.isClicked(mouseX, mouseY)) {
-                    createFood("flour", "images/flour.png");
-                } 
-                if (addSyrup.isClicked(mouseX, mouseY)) {
-                    createFood("syrup", "images/syrup.png");
-                }  
-                if (addWater.isClicked(mouseX, mouseY)) {
-                    createFood("water", "images/water.png");
-                }
+                if (addEgg.isClicked(mouseX, mouseY)) {createFood("egg", "1images/egg.png");} 
+                if (addFlour.isClicked(mouseX, mouseY)) {createFood("flour", "1images/flour.png");} 
+                if (addSyrup.isClicked(mouseX, mouseY)) {createFood("syrup", "1images/syrup.png");}  
+                if (addWater.isClicked(mouseX, mouseY)) {createFood("water", "1images/water.png");}
         }
     }
 
@@ -100,7 +91,6 @@ public class Sketch extends PApplet {
         }
     }
 
-    
     public void createFood(String type, String imgPath) {
         boolean goodSpot = false; //starts as false to run while loop
 
@@ -136,20 +126,31 @@ public class Sketch extends PApplet {
     public void draw(){
         switch (stage){
             case 0: //title page================================================
-                background(loadImage("images/background_menu.png"));
+                background(loadImage("1backgrounds/mainmenu.png"));
                 startButton.draw();
-                helpButton.draw();
                 break;
    
-            case 1: //help page=================================================
-                background(255); 
-                textSize(20);
-                fill(0);
-                text("help screen",100, 100);
+            case 1: //intro page=================================================
+                if (intro==1) background(loadImage("1backgrounds/1.png"));
+                else if (intro==2) background(loadImage("1backgrounds/2.png"));
+                else if (intro==3) background(loadImage("1backgrounds/3.png"));
+                else if (intro==4) background(loadImage("1backgrounds/4.png"));
+                else if (intro==5) background(loadImage("1backgrounds/5.png"));
+                else if (intro==6) background(loadImage("1backgrounds/6.png"));
+                else if (intro==7) background(loadImage("1backgrounds/7.png"));
+                else if (intro==8) background(loadImage("1backgrounds/8.png"));
+                else if (intro==9) background(loadImage("1backgrounds/9.png"));
+                else if (intro==10) background(loadImage("1backgrounds/91.png"));
+                else if (intro==11) background(loadImage("1backgrounds/92.png"));
+                else if (intro==12) background(loadImage("1backgrounds/93.png"));
+                else if (intro==13) background(loadImage("1backgrounds/94.png"));
+                else if (intro==14) background(loadImage("1backgrounds/95.png"));
+                else if (intro==15) background(loadImage("1backgrounds/96.png"));
+                else if (intro==16) background(loadImage("1backgrounds/97.png"));
                 break;
                 
             case 2: //game page=================================================
-                background(loadImage("images/background_moon.png"));
+                background(loadImage("1backgrounds/moon.png"));
                 addEgg.draw();
                 addFlour.draw();
                 addSyrup.draw();

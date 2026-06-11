@@ -31,7 +31,7 @@ public class UserRabbit {
 
         //loop through and preload images of rabbits walking
         for (int i = 0; i < rabbit.length; i++) {
-            rabbitImages[i] = app.loadImage("images/" + rabbit[i]);
+            rabbitImages[i] = app.loadImage("1images/" + rabbit[i]);
         }
         
         image = rabbitImages[0]; //first picture as rabbit start
