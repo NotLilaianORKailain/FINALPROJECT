@@ -18,11 +18,23 @@ public class FoodItem {
     public int width, height;
     private PApplet app;
     public PImage image;
+
+    private final int DEFAULT_X = Sketch.ROWS[0];    
+    private final int DEFAULT_Y = Sketch.COLS[0];
+
     
     public FoodItem(PApplet p, int x, int y, String imagePath) {
         this.app = p;
         this.image = app.loadImage(imagePath);
         this.x = x; this.y = y; //location of picture
+        this.width = image.width; this.height = image.height; //picture size
+    }
+    
+    public FoodItem(PApplet p, String imagePath) {
+        this.app = p;
+        this.image = app.loadImage(imagePath);
+        this.x = DEFAULT_X; 
+        this.y = DEFAULT_Y; 
         this.width = image.width; this.height = image.height; //picture size
     }
     

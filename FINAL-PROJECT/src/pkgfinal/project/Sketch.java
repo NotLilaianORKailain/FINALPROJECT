@@ -121,7 +121,70 @@ public class Sketch extends PApplet {
             }
         }
     }
+    
+    public void checkFoodCombinations() {
+        Flour flour = null;
+        Syrup syrup = null;
+        Water water = null;
+        Dough dough = null;
+        Egg egg = null;
 
+        // Look for flour, syrup, and water that are touching
+        for (int i = 0; i < foodCount; i++) {
+            if (food[i] instanceof Flour) flour = (Flour) food[i];
+            if (food[i] instanceof Syrup) syrup = (Syrup) food[i];
+            if (food[i] instanceof Water) water = (Water) food[i];
+            if (food[i] instanceof Dough) dough = (Dough) food[i];
+            if (food[i] instanceof Egg) egg = (Egg) food[i];
+        }
+
+        // -------------------------
+        // RECIPE 1: Flour + Syrup + Water → Dough
+        // -------------------------
+        if (flour != null && syrup != null && water != null) {
+            if (flour.x == syrup.x && flour.x == water.x &&
+                flour.y == syrup.y && flour.y == water.y) {
+
+                int x = flour.x;
+                int y = flour.y;
+
+                removeFood(flour);
+                removeFood(syrup);
+                removeFood(water);
+
+                food[foodCount] = new Dough(this, x, y, "1images/dough.png");
+                foodCount++;
+                return; // stop here so it doesn’t run next recipe immediately
+            }
+        }
+
+        // -------------------------
+        // RECIPE 2: Dough + Water → Mooncake
+        // -------------------------
+        if (dough != null && egg != null) {
+            if (dough.x == egg.x && dough.y == egg.y) {
+
+                int x = dough.x;
+                int y = dough.y;
+
+                removeFood(dough);
+                removeFood(egg);
+
+                food[foodCount] = new Mooncake(this, x, y, "1images/mooncake.png");
+                foodCount++;
+            }
+        }
+    }
+    
+    public void removeFood(FoodItem item) {
+        for (int i = 0; i < foodCount; i++) {
+            if (food[i] == item) {
+                food[i] = null;
+            }
+        }
+    }
+    
+    
     
     public void draw(){
         switch (stage){
@@ -158,7 +221,7 @@ public class Sketch extends PApplet {
 
                 //check movement of all items
                 for (int i = 0; i < foodCount; i++) {
-                    if (keyPressed) {
+                    if (keyPressed && food[i] != null) {
                         if (keyCode == LEFT) attemptMove(-5, 0, food[i], -1, 0); 
                         else if (keyCode == RIGHT) attemptMove(5, 0, food[i], 1, 0);
                         else if (keyCode == UP) attemptMove(0, -5, food[i], 0, -1);
@@ -170,6 +233,7 @@ public class Sketch extends PApplet {
                 for (int i = 0; i < foodCount; i++) {
                     if (food[i] != null) {food[i].draw();} //draw all food up to counter
                 } 
+                checkFoodCombinations();
                 break;
 
             default: //fall through=============================================

@@ -17,7 +17,7 @@ public class UserRabbit {
     
     private PApplet app;
     private PImage image; private int width, height;
-    public static int imageCount = 0;
+    public static int imageCount = 0; 
     
     private String[] rabbit = {"rabbit1.png", "rabbit2.png", 
                                "rabbit3.png", "rabbit4.png", 
@@ -55,20 +55,18 @@ public class UserRabbit {
     }
     
     public boolean isCollidingWith(FoodItem other) {
-        // calculates the center of this image 
+        // calculates the center of rabbit
         int centerX = x + (width / 2);
         int centerY = y + (height / 2);
+        
         // calculates the center of the other image 
         int otherCenterX = other.x + (other.image.pixelWidth / 2);
         int otherCenterY = other.y + (other.image.pixelHeight / 2);
+        
         // calcalutes the distance between the two center points
         float d = PApplet.dist(otherCenterX, otherCenterY, centerX, centerY);
-        
-//        app.ellipse(centerX, centerY, width, height);
-//        app.ellipse(otherCenterX, otherCenterY, other.image.pixelWidth, other.image.pixelHeight);
-        
-        // returns true if  the distance between the 2 cener points is
-        // less than 32 pixels
+
+        // returns true if the distance between is less than 90
         return d < 90;
     }
 //
