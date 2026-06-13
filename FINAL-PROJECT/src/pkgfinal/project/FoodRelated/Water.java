@@ -12,7 +12,7 @@ import processing.core.PImage;
  * @author 343479150
  */
 public class Water extends FoodItem {
-    
+    //constructor of a subclass item that just feeds into parent via super
     public Water(PApplet p, int x, int y, String imagePath) {
         super(p,x,y,imagePath);
     }

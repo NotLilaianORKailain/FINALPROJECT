@@ -13,7 +13,7 @@ import processing.core.PImage;
  * @author 343479150
  */
 public class FoodItem {
-    //declare needed var to set up users rabbit
+    //declare needed var to set up each food item
     public int x, y;
     public int width, height;
     protected PApplet app;
@@ -22,7 +22,7 @@ public class FoodItem {
     private final int DEFAULT_X = Sketch.ROWS[0];    
     private final int DEFAULT_Y = Sketch.COLS[0];
 
-    
+    //constructor with set location
     public FoodItem(PApplet p, int x, int y, String imagePath) {
         this.app = p;
         this.image = app.loadImage(imagePath);
@@ -30,14 +30,15 @@ public class FoodItem {
         this.width = image.width; this.height = image.height; //picture size
     }
     
+     //constructor with defalut location
     public FoodItem(PApplet p, String imagePath) {
         this.app = p;
         this.image = app.loadImage(imagePath);
-        this.x = DEFAULT_X; 
-        this.y = DEFAULT_Y; 
+        this.x = DEFAULT_X; this.y = DEFAULT_Y; //defalut location
         this.width = image.width; this.height = image.height; //picture size
     }
     
+    //method of how food moves while staying within frame (left and right)
     public void moveX(int step) {
         //loop and find current box, check if inbound, then move to next step x
         for (int i = 0; i < Sketch.COLS.length; i++) {
@@ -50,7 +51,7 @@ public class FoodItem {
        }
     }
     
-    
+    //method of how food moves while staying within frame (up and down)
     public void moveY(int step) {
         //loop and find current box, check if inbound, then move to next step y
         for (int i = 0; i < Sketch.ROWS.length; i++) {
@@ -64,6 +65,7 @@ public class FoodItem {
        }
     }
 
+    //method to draw each food in the center of the gird boxes
     public void draw() {
         app.image(image, x-image.width/2, y-image.height/2); //draw image at position
     }

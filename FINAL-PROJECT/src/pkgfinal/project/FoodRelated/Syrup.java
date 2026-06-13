@@ -12,7 +12,7 @@ import processing.core.PImage;
  */
 
 public class Syrup extends FoodItem {
-    
+    //constructor of a subclass item that just feeds into parent via super
     public Syrup(PApplet p, int x, int y, String imagePath) {
         super(p,x,y,imagePath);
     }

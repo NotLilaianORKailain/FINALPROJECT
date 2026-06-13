@@ -9,7 +9,8 @@ import processing.core.PApplet;
  * @author 343479150
  */
 public class Egg extends FoodItem {
-        public Egg(PApplet p, int x, int y, String imagePath) {
+    //constructor of a subclass item that just feeds into parent via super
+    public Egg(PApplet p, int x, int y, String imagePath) {
         super(p,x,y,imagePath);
     }
 }

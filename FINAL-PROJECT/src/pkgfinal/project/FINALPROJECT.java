@@ -13,6 +13,7 @@ public class FINALPROJECT {
     /**
      * @param args the command line arguments
      */
+    //java main that runs the sketch class
     public static void main(String[] args) {
         Sketch.main("pkgfinal.project.Sketch");
     }
