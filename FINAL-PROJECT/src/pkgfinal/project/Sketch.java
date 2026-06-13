@@ -12,6 +12,15 @@ import pkgfinal.project.FoodRelated.Syrup;
 import pkgfinal.project.FoodRelated.Water;
 import pkgfinal.project.FoodRelated.Mooncake;
 import pkgfinal.project.FoodRelated.Dough;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+
+import java.io.File;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+
 /**
  *
  * @author 343479150
@@ -26,16 +35,11 @@ public class Sketch extends PApplet {
     
     public static final int[] COLS = {107, 253, 399, 545, 691}; //add 146
     public static final int[] ROWS = {93, 231, 369, 490}; //add 138 but the last
-
-//line(107, 0, 107, 800); debug movement put in draw
-//line(253, 0, 253, 800);
-//line(399, 0, 399, 800);
-//line(545, 0, 545, 800);
-//line(691, 0, 691, 800);
-//    line(0, 93, 800, 93);
-//    line(0, 231, 800, 231);
-//    line(0, 369, 800, 369);
-//    line(0, 490, 800, 490);
+    FoodItem[][] board = new FoodItem[4][5];
+    
+    int gameStartTime;
+    int gameDuration = 30000; // 30 seconds in milliseconds
+    boolean gameEnded = false;
     
     public void settings(){
         size(800,600); //set size to 800 pixel long by 600 pixel high
@@ -48,7 +52,6 @@ public class Sketch extends PApplet {
         addWater = new Buttons(this, 346, 518, "1buttons/addWater.png");
         
         user = new UserRabbit(this, 620, 400);
-        createFood("mooncake","1images/mooncake.png"); //creates first moon cake
     }
     
     public void mousePressed() {
@@ -59,7 +62,7 @@ public class Sketch extends PApplet {
                 if (startButton.isClicked(mouseX, mouseY)) stage = 1;
 
             case 1:
-                if(intro<16) intro++;
+                if(intro<20) intro++;
                 else stage = 2;
                 break;
             
@@ -90,102 +93,153 @@ public class Sketch extends PApplet {
             }
         }
     }
-
     public void createFood(String type, String imgPath) {
-        boolean goodSpot = false; //starts as false to run while loop
+
+        boolean goodSpot = false;
 
         while (!goodSpot) {
-            int xShift = (int)(Math.random()*COLS.length); //random col
-            int yShift = (int)(Math.random()*ROWS.length); //random row
 
-            //find the value of the col and row and test if spot is valid
+            int xShift = (int) (Math.random() * COLS.length);
+            int yShift = (int) (Math.random() * ROWS.length);
+
             int x = COLS[xShift];
             int y = ROWS[yShift];
+
             goodSpot = true;
 
-            //check overlap with existing food, if x and y match smth else = bad spot
-            for (int i = 0; i < foodCount; i++) {
+            for (int i = 0; i < food.length; i++) {
                 if (food[i] != null && food[i].x == x && food[i].y == y) {
-                    goodSpot = false; break;
+                    goodSpot = false;
+                    break;
                 }
             }
 
-            if (goodSpot == true) { //if checker didnt turn spot to flase then make mooncake
-                if (type.equals("egg")) food[foodCount] = new Egg(this, x, y, imgPath);
-                else if (type.equals("flour")) food[foodCount] = new Flour(this, x, y, imgPath);
-                else if (type.equals("syrup")) food[foodCount] = new Syrup(this, x, y, imgPath);
-                else if (type.equals("water")) food[foodCount] = new Water(this, x, y, imgPath);
-                else if (type.equals("dough")) food[foodCount] = new Dough(this, x, y, imgPath);
-                else food[foodCount] = new Mooncake(this, x, y, imgPath);
+            if (goodSpot) {
+
+                int slot = getEmptySlot();
+                if (slot == -1) return;
+                
+                if (type.equals("egg")) food[slot] = new Egg(this, x, y, imgPath);
+                else if (type.equals("flour")) food[slot] = new Flour(this, x, y, imgPath);
+                else if (type.equals("syrup")) food[slot] = new Syrup(this, x, y, imgPath);
+                else if (type.equals("water")) food[slot] = new Water(this, x, y, imgPath);
+                else if (type.equals("dough")) food[slot] = new Dough(this, x, y, imgPath);
+                else food[slot] = new Mooncake(this, x, y, imgPath);
+                            
+                board[yShift][xShift] = food[foodCount]; //track food in board
                 foodCount++;
             }
         }
     }
     
-    public void checkFoodCombinations() {
-        Flour flour = null;
-        Syrup syrup = null;
-        Water water = null;
-        Dough dough = null;
-        Egg egg = null;
+public void checkFoodCombinations() {
 
-        // Look for flour, syrup, and water that are touching
-        for (int i = 0; i < foodCount; i++) {
-            if (food[i] instanceof Flour) flour = (Flour) food[i];
-            if (food[i] instanceof Syrup) syrup = (Syrup) food[i];
-            if (food[i] instanceof Water) water = (Water) food[i];
-            if (food[i] instanceof Dough) dough = (Dough) food[i];
-            if (food[i] instanceof Egg) egg = (Egg) food[i];
-        }
+    Flour flour = null;
+    Water water = null;
+    Syrup syrup = null;
+    Dough dough = null;
+    Egg egg = null;
 
-        // -------------------------
-        // RECIPE 1: Flour + Syrup + Water → Dough
-        // -------------------------
-        if (flour != null && syrup != null && water != null) {
-            if (flour.x == syrup.x && flour.x == water.x &&
-                flour.y == syrup.y && flour.y == water.y) {
+    // Find existing items
+    for (int i = 0; i < food.length; i++) {
+        if (food[i] instanceof Flour) flour = (Flour) food[i];
+        if (food[i] instanceof Water) water = (Water) food[i];
+        if (food[i] instanceof Syrup) syrup = (Syrup) food[i];
+        if (food[i] instanceof Dough) dough = (Dough) food[i];
+        if (food[i] instanceof Egg) egg = (Egg) food[i];
+    }
 
-                int x = flour.x;
-                int y = flour.y;
+    // -------------------------
+    // RECIPE 1: Flour + Water + Syrup = Dough
+    // -------------------------
+    if (flour != null && water != null && syrup != null) {
 
-                removeFood(flour);
-                removeFood(syrup);
-                removeFood(water);
+        if (flour.x == water.x && flour.x == syrup.x &&
+            flour.y == water.y && flour.y == syrup.y) {
 
-                food[foodCount] = new Dough(this, x, y, "1images/dough.png");
-                foodCount++;
-                return; // stop here so it doesn’t run next recipe immediately
+            int x = flour.x;
+            int y = flour.y;
+
+            removeFood(flour);
+            removeFood(water);
+            removeFood(syrup);
+
+            int slot = getEmptySlot();
+            if (slot != -1) {
+                food[slot] = new Dough(this, x, y, "1images/dough.png");
+                saveTransaction("Flour + Water + Syrup = Dough");
             }
+
+            return;
         }
+    }
 
-        // -------------------------
-        // RECIPE 2: Dough + Water → Mooncake
-        // -------------------------
-        if (dough != null && egg != null) {
-            if (dough.x == egg.x && dough.y == egg.y) {
+    // -------------------------
+    // RECIPE 2: Dough + Egg = Mooncake
+    // -------------------------
+    if (dough != null && egg != null) {
 
-                int x = dough.x;
-                int y = dough.y;
+        if (dough.x == egg.x && dough.y == egg.y) {
 
-                removeFood(dough);
-                removeFood(egg);
+            int x = dough.x;
+            int y = dough.y;
 
-                food[foodCount] = new Mooncake(this, x, y, "1images/mooncake.png");
-                foodCount++;
+            removeFood(dough);
+            removeFood(egg);
+
+            int slot = getEmptySlot();
+            if (slot != -1) {
+                food[slot] = new Mooncake(this, x, y, "1images/mooncake.png");
+                saveTransaction("Dough + Egg = Mooncake");
             }
         }
     }
+}
     
+    public int getEmptySlot() {
+        for (int i = 0; i < food.length; i++) {
+            if (food[i] == null) {
+                return i;
+            }
+        }
+        return -1; // no space left
+    }
     public void removeFood(FoodItem item) {
-        for (int i = 0; i < foodCount; i++) {
+
+        for (int i = 0; i < food.length; i++) {
             if (food[i] == item) {
                 food[i] = null;
             }
         }
     }
     
+    public void saveTransaction(String combo) {
+        try {
+            PrintWriter output = new PrintWriter(new FileWriter("dataLog.txt", true));
+            output.println(combo);
+            output.close();
+        } catch (IOException e) {
+            System.out.println("Error saving");
+        }
+    } 
     
-    
+    public int readFile() {
+        int count = 0;
+            try {
+                File file = new File("dataLog.txt");
+                Scanner input = new Scanner(file);
+
+                while (input.hasNextLine()) {
+                    String line = input.nextLine();
+                    if (line.contains("Mooncake")) {count++;}
+                }
+                input.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found");
+            }
+            return count;
+    }
+
     public void draw(){
         switch (stage){
             case 0: //title page================================================
@@ -210,15 +264,36 @@ public class Sketch extends PApplet {
                 else if (intro==14) background(loadImage("1backgrounds/95.png"));
                 else if (intro==15) background(loadImage("1backgrounds/96.png"));
                 else if (intro==16) background(loadImage("1backgrounds/97.png"));
+                else if (intro==17) background(loadImage("1backgrounds/98.png"));
+                else if (intro==18) background(loadImage("1backgrounds/99.png"));
+                else if (intro==19) background(loadImage("1backgrounds/991.png"));
+                else if (intro==20) background(loadImage("1backgrounds/992.png"));
                 break;
                 
             case 2: //game page=================================================
+                if (gameStartTime == 0) {
+                    gameStartTime = millis(); // start timer once
+                }
+                System.out.print(foodCount);
+                
                 background(loadImage("1backgrounds/moon.png"));
                 addEgg.draw();
                 addFlour.draw();
                 addSyrup.draw();
                 addWater.draw();
 
+                int timeLeft = gameDuration - (millis() - gameStartTime);
+                int secondsLeft = max(0, timeLeft / 1000);
+                if (secondsLeft <= 5) {
+                    fill(255, 0, 0);
+                } else {
+                    fill(0);
+                }
+                textSize(50);
+                text("Time Left: " + secondsLeft, 50, 85);
+                
+
+                
                 //check movement of all items
                 for (int i = 0; i < foodCount; i++) {
                     if (keyPressed && food[i] != null) {
@@ -234,8 +309,23 @@ public class Sketch extends PApplet {
                     if (food[i] != null) {food[i].draw();} //draw all food up to counter
                 } 
                 checkFoodCombinations();
+                
+                if (!gameEnded && millis() - gameStartTime >= gameDuration) {
+                    gameEnded = true;
+                    stage = 3;
+                }
+                
                 break;
 
+            case 3:
+                int score = readFile();
+                background(loadImage("1backgrounds/rabbit.png"));
+                fill(255);
+                textSize(50);
+
+                text("Time's Up!", 265, 280);
+                text("Mooncakes Made: " + score, 190, 350);
+                break;
             default: //fall through=============================================
                 break;
         }   

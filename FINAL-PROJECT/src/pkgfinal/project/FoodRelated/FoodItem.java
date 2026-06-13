@@ -16,7 +16,7 @@ public class FoodItem {
     //declare needed var to set up users rabbit
     public int x, y;
     public int width, height;
-    private PApplet app;
+    protected PApplet app;
     public PImage image;
 
     private final int DEFAULT_X = Sketch.ROWS[0];    
